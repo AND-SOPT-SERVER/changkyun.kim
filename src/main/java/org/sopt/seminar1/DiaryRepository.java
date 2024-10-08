@@ -22,15 +22,24 @@ public class DiaryRepository {
         // (1) diary를 담을 자료구조
         final List<Diary> diaryList = new ArrayList<>();
 
-        // (2) 저장한 값을 불러오는 반복 구조
-        for (long index = 1; index <= numbering.intValue(); index++) {
-            final String body = storage.get(index);
+        // (2) 실제 저장된 key를 기준으로 하는 반복 구조
+        for (Map.Entry<Long, String> entry : storage.entrySet()) {
+            long id = entry.getKey();
+            String body = entry.getValue();
 
             // (2-1) 불러온 값을 구성한 자료구조로 이관
-            diaryList.add(new Diary(index, body));
+            diaryList.add(new Diary(id, body));
         }
 
         // (3) 불러온 자료구조를 응답
         return diaryList;
+    }
+
+    boolean existsById(final Long id) {
+        return storage.containsKey(id);
+    }
+
+    void delete(final Long id) {
+        storage.remove(id);
     }
 }

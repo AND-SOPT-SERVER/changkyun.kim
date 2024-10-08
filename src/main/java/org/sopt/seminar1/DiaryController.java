@@ -28,7 +28,9 @@ public class DiaryController {
     }
 
     final void delete(final String id) {
-        
+        Validator.validate(id);
+
+        diaryService.deleteDiary(Long.valueOf(id));
     }
 
     final void patch(final String id, final String body) {

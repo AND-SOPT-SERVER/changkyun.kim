@@ -23,4 +23,12 @@ public class DiaryService {
             throw new InvalidInputException();
         }
     }
+
+    void editDiary(final Long id, final String body) {
+        if (diaryRepository.existsById(id)) {
+            diaryRepository.edit(id, body);
+        } else {
+            throw new InvalidInputException();
+        }
+    }
 }

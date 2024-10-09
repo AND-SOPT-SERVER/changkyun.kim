@@ -42,4 +42,8 @@ public class DiaryRepository {
     void delete(final Long id) {
         storage.remove(id);
     }
+
+    void edit(final Long id, final String body) {
+        storage.replace(id, body);
+    }
 }

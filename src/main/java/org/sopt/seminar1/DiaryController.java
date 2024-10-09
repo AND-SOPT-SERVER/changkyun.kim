@@ -34,7 +34,9 @@ public class DiaryController {
     }
 
     final void patch(final String id, final String body) {
+        Validator.validate(id);
 
+        diaryService.editDiary(Long.valueOf(id), body);
     }
 
     enum Status {

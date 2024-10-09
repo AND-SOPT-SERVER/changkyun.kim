@@ -25,6 +25,9 @@ public class Main {
 
         class InvalidInputException extends UIException {
         }
+
+        class TextLengthExceededException extends UIException {
+        }
     }
 
     static class DiaryUI implements UI {
@@ -50,6 +53,8 @@ public class Main {
                     run();
                 } catch (InvalidInputException e) {
                     ConsoleIO.printLine("잘못된 값을 입력하였습니다.");
+                } catch (TextLengthExceededException e) {
+                    ConsoleIO.printLine("30자 이하로 다시 작성해 주세요~");
                 }
 
                 if (isFinished()) {

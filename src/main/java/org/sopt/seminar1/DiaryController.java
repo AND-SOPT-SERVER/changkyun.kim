@@ -24,17 +24,19 @@ public class DiaryController {
     }
 
     final void post(final String body) {
+        Validator.validateLength(body);
+
         diaryService.writeDiary(body);
     }
 
     final void delete(final String id) {
-        Validator.validate(id);
+        Validator.validateId(id);
 
         diaryService.deleteDiary(Long.valueOf(id));
     }
 
     final void patch(final String id, final String body) {
-        Validator.validate(id);
+        Validator.validateId(id);
 
         diaryService.editDiary(Long.valueOf(id), body);
     }

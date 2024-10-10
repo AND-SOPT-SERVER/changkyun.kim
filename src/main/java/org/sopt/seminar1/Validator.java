@@ -1,5 +1,6 @@
 package org.sopt.seminar1;
 
+import com.ibm.icu.text.BreakIterator;
 import org.sopt.seminar1.Main.UI.DiaryLengthExceededException;
 import org.sopt.seminar1.Main.UI.InvalidInputException;
 
@@ -15,10 +16,25 @@ public class Validator {
     }
 
     static void validateLength(final String input) {
-        if (input.length() > MAX_DIARY_LENGTH) {
-            System.out.print(input.length() + "자네요! ");
+        int inputLength = countGraphemeClusters(input);
+
+        if (inputLength > MAX_DIARY_LENGTH) {
+            System.out.print(inputLength + "자네요! ");
 
             throw new DiaryLengthExceededException();
         }
+    }
+
+    private static int countGraphemeClusters(final String input) {
+        BreakIterator iterator = BreakIterator.getCharacterInstance();
+        iterator.setText(input);
+
+        int count = 0;
+
+        while (BreakIterator.DONE != iterator.next()) {
+            count++;
+        }
+
+        return count;
     }
 }

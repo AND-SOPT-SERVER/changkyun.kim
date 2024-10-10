@@ -44,6 +44,6 @@ public class DiaryRepository {
     }
 
     void edit(final Long id, final String body) {
-        storage.replace(id, body);
+        storage.put(id, body); // 덮어쓰기
     }
 }

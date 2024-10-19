@@ -8,6 +8,7 @@ import org.sopt.seminar2.service.DiaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +59,17 @@ public class DiaryController {
             @Valid @RequestBody final PatchDiaryRequest patchDiaryRequest
     ) {
         diaryService.editDiary(id, patchDiaryRequest.newBody());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteDiary(
+            @NotNull(message = "일기 Id는 공백일 수 없습니다.")
+            @Positive(message = "일기 Id는 양수여야 합니다.")
+            @PathVariable final Long id
+    ) {
+        diaryService.removeDiary(id);
 
         return ResponseEntity.ok().build();
     }

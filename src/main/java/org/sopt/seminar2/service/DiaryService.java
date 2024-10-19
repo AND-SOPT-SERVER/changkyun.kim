@@ -1,5 +1,7 @@
 package org.sopt.seminar2.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import org.sopt.seminar2.api.DiaryDetailResponse;
@@ -14,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final EntityManager entityManager;
 
-    public DiaryService(DiaryRepository diaryRepository) {
+    public DiaryService(DiaryRepository diaryRepository, EntityManager entityManager) {
         this.diaryRepository = diaryRepository;
+        this.entityManager = entityManager;
     }
 
     @Transactional
@@ -55,5 +59,12 @@ public class DiaryService {
     public void editDiary(final Long id, final String newBody) {
         DiaryEntity diaryEntity = diaryRepository.findDiaryEntityByIdOrThrow(id);
         diaryEntity.editBody(newBody);
+    }
+
+    @Transactional
+    public void removeDiary(final Long id) {
+        Query query = entityManager.createNativeQuery("DELETE FROM diary_entity WHERE id = ?");
+        query.setParameter(1, id);
+        query.executeUpdate();
     }
 }

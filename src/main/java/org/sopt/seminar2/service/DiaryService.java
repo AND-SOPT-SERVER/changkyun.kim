@@ -2,6 +2,7 @@ package org.sopt.seminar2.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sopt.seminar2.api.DiaryDetailResponse;
 import org.sopt.seminar2.api.DiaryRequest;
 import org.sopt.seminar2.api.DiaryResponse;
 import org.sopt.seminar2.repository.DiaryEntity;
@@ -33,5 +34,16 @@ public class DiaryService {
         }
 
         return list;
+    }
+
+    public DiaryDetailResponse getDiaryDetail(final Long id) {
+        final DiaryEntity diaryEntity = diaryRepository.findDiaryEntityByIdOrThrow(id);
+
+        return new DiaryDetailResponse(
+                diaryEntity.getId(),
+                diaryEntity.getTitle(),
+                diaryEntity.getBody(),
+                diaryEntity.getCreateAt()
+        );
     }
 }

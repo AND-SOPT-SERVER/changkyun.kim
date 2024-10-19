@@ -18,10 +18,10 @@ public class DiaryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column(length = 30)
+    @Column(nullable = false)
     private String body;
 
     @CreatedDate
@@ -36,7 +36,7 @@ public class DiaryEntity {
         this.body = body;
     }
 
-    public static DiaryEntity create(String title, String body) {
+    public static DiaryEntity create(final String title, final String body) {
         return new DiaryEntity(title, body);
     }
 

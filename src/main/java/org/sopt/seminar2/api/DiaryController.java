@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class DiaryController {
 
     @PostMapping
     ResponseEntity<Void> postDiary(
-            @RequestBody @Valid final DiaryRequest diaryRequest
+            @Valid @RequestBody final DiaryRequest diaryRequest
     ) {
         diaryService.writeDiary(diaryRequest);
 
@@ -44,8 +45,20 @@ public class DiaryController {
     ResponseEntity<DiaryDetailResponse> getDiaryDetail(
             @NotNull(message = "일기 Id는 공백일 수 없습니다.")
             @Positive(message = "일기 Id는 양수여야 합니다.")
-            @PathVariable Long id
+            @PathVariable final Long id
     ) {
         return ResponseEntity.ok(diaryService.getDiaryDetail(id));
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<Void> patchDiary(
+            @NotNull(message = "일기 Id는 공백일 수 없습니다.")
+            @Positive(message = "일기 Id는 양수여야 합니다.")
+            @PathVariable final Long id,
+            @Valid @RequestBody final PatchDiaryRequest patchDiaryRequest
+    ) {
+        diaryService.editDiary(id, patchDiaryRequest.newBody());
+
+        return ResponseEntity.ok().build();
     }
 }

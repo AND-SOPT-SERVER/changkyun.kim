@@ -40,6 +40,10 @@ public class DiaryEntity {
         return new DiaryEntity(title, body);
     }
 
+    public void editBody(final String newBody) {
+        this.body = newBody;
+    }
+
     public Long getId() {
         return id;
     }

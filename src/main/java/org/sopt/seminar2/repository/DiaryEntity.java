@@ -27,8 +27,8 @@ public class DiaryEntity {
     private String body;
 
     @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     protected DiaryEntity() {
     }
@@ -58,7 +58,7 @@ public class DiaryEntity {
         return body;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

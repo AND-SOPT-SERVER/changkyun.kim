@@ -5,8 +5,11 @@ import jakarta.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import org.sopt.seminar2.api.DiaryDetailResponse;
-import org.sopt.seminar2.api.DiaryRequest;
 import org.sopt.seminar2.api.DiaryResponse;
+import org.sopt.seminar2.api.PostDiaryRequest;
+import org.sopt.seminar2.common.enums.ErrorType;
+import org.sopt.seminar2.common.enums.OrderBy;
+import org.sopt.seminar2.common.exception.CustomException;
 import org.sopt.seminar2.repository.DiaryEntity;
 import org.sopt.seminar2.repository.DiaryRepository;
 import org.springframework.stereotype.Component;
@@ -24,14 +27,14 @@ public class DiaryService {
     }
 
     @Transactional
-    public void writeDiary(final DiaryRequest diaryRequest) {
-        final DiaryEntity newDiaryEntity = DiaryEntity.create(diaryRequest.title(), diaryRequest.body());
+    public void writeDiary(final PostDiaryRequest postDiaryRequest) {
+        final DiaryEntity newDiaryEntity = DiaryEntity.create(postDiaryRequest.title(), postDiaryRequest.body());
         diaryRepository.save(newDiaryEntity);
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryResponse> getDiaryList() {
-        final List<DiaryEntity> diaryEntityList = diaryRepository.findTop10ByOrderByCreateAtDesc();
+    public List<DiaryResponse> fetchDiaryList(OrderBy orderBy) {
+        final List<DiaryEntity> diaryEntityList = findDiaryEntitiesByOrderCriteria(orderBy);
 
         List<DiaryResponse> list = new ArrayList<>();
 
@@ -43,15 +46,23 @@ public class DiaryService {
         return list;
     }
 
+    private List<DiaryEntity> findDiaryEntitiesByOrderCriteria(final OrderBy orderBy) {
+        return switch (orderBy) {
+            case CREATED_AT_DESC -> diaryRepository.findTop10ByOrderByCreatedAtDesc();
+            case BODY_LENGTH_DESC -> diaryRepository.findTop10ByOrderByBodyLengthDesc();
+            default -> throw new CustomException(ErrorType.INVALID_ORDER_CRITERIA_ERROR);
+        };
+    }
+
     @Transactional(readOnly = true)
-    public DiaryDetailResponse getDiaryDetail(final Long id) {
+    public DiaryDetailResponse fetchDiaryDetail(final Long id) {
         final DiaryEntity diaryEntity = diaryRepository.findDiaryEntityByIdOrThrow(id);
 
         return new DiaryDetailResponse(
                 diaryEntity.getId(),
                 diaryEntity.getTitle(),
                 diaryEntity.getBody(),
-                diaryEntity.getCreateAt()
+                diaryEntity.getCreatedAt()
         );
     }
 

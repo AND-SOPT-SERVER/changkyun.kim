@@ -22,8 +22,8 @@ public record ResponseDto<T>(
         return new ResponseDto<>(errorType.getCode(), null, errorType.getMessage(), null);
     }
 
-    public static <T> ResponseDto<T> fail(final ErrorType errorType, final String detail) {
-        return new ResponseDto<>(errorType.getCode(), null, errorType.getMessage() + " (" + detail + ")", null);
+    public static <T> ResponseDto<T> fail(final ErrorType errorType, final String errorDetail) {
+        return new ResponseDto<>(errorType.getCode(), null, errorType.getMessage() + " (" + errorDetail + ")", null);
     }
 
     public static <T> ResponseDto<T> fail(final ErrorType errorType, final BindingResult bindingResult) {

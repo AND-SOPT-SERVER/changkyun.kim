@@ -1,9 +1,9 @@
 package org.sopt.seminar2.api;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
+import org.sopt.seminar2.common.enums.OrderBy;
 import org.sopt.seminar2.service.DiaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,30 +30,31 @@ public class DiaryController {
 
     @PostMapping
     ResponseEntity<Void> postDiary(
-            @Valid @RequestBody final DiaryRequest diaryRequest
+            @Valid @RequestBody final PostDiaryRequest postDiaryRequest
     ) {
-        diaryService.writeDiary(diaryRequest);
+        diaryService.writeDiary(postDiaryRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
-    ResponseEntity<List<DiaryResponse>> getDiaryList() {
-        return ResponseEntity.ok(diaryService.getDiaryList());
+    ResponseEntity<List<DiaryResponse>> getDiaryList(
+            @Valid @RequestBody final DiaryListRequest diaryListRequest
+    ) {
+        OrderBy orderBy = diaryListRequest.convertToOrderBy();
+        return ResponseEntity.ok(diaryService.fetchDiaryList(orderBy));
     }
 
     @GetMapping("/{id}")
     ResponseEntity<DiaryDetailResponse> getDiaryDetail(
-            @NotNull(message = "일기 Id는 공백일 수 없습니다.")
             @Positive(message = "일기 Id는 양수여야 합니다.")
             @PathVariable final Long id
     ) {
-        return ResponseEntity.ok(diaryService.getDiaryDetail(id));
+        return ResponseEntity.ok(diaryService.fetchDiaryDetail(id));
     }
 
     @PatchMapping("/{id}")
     ResponseEntity<Void> patchDiary(
-            @NotNull(message = "일기 Id는 공백일 수 없습니다.")
             @Positive(message = "일기 Id는 양수여야 합니다.")
             @PathVariable final Long id,
             @Valid @RequestBody final PatchDiaryRequest patchDiaryRequest
@@ -65,7 +66,6 @@ public class DiaryController {
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteDiary(
-            @NotNull(message = "일기 Id는 공백일 수 없습니다.")
             @Positive(message = "일기 Id는 양수여야 합니다.")
             @PathVariable final Long id
     ) {

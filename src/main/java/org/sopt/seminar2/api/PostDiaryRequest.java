@@ -3,7 +3,7 @@ package org.sopt.seminar2.api;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record DiaryRequest(
+public record PostDiaryRequest(
         @NotBlank(message = "일기 제목은 공백일 수 없습니다.")
         String title,
         @NotBlank(message = "일기 내용은 공백일 수 없습니다.")

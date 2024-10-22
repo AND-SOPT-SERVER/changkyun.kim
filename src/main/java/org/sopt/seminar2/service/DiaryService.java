@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sopt.seminar2.api.DiaryDetailResponse;
 import org.sopt.seminar2.api.DiaryResponse;
-import org.sopt.seminar2.api.PostDiaryRequest;
+import org.sopt.seminar2.common.enums.Category;
 import org.sopt.seminar2.common.enums.ErrorType;
 import org.sopt.seminar2.common.enums.OrderBy;
 import org.sopt.seminar2.common.exception.CustomException;
@@ -27,18 +27,32 @@ public class DiaryService {
     }
 
     @Transactional
-    public void writeDiary(final PostDiaryRequest postDiaryRequest) {
-        if (diaryRepository.existsByTitle(postDiaryRequest.title())) {
+    public void writeDiary(final Category category, final String title, final String body) {
+        if (diaryRepository.existsByTitle(title)) {
             throw new CustomException(ErrorType.DUPLICATE_DIARY_TITLE_ERROR);
         }
 
-        final DiaryEntity newDiaryEntity = DiaryEntity.create(postDiaryRequest.title(), postDiaryRequest.body());
+        final DiaryEntity newDiaryEntity = DiaryEntity.create(category, title, body);
         diaryRepository.save(newDiaryEntity);
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryResponse> fetchDiaryList(OrderBy orderBy) {
+    public List<DiaryResponse> fetchDiaryList(final OrderBy orderBy) {
         final List<DiaryEntity> diaryEntityList = findDiaryEntitiesByOrderCriteria(orderBy);
+
+        List<DiaryResponse> list = new ArrayList<>();
+
+        for (DiaryEntity diaryEntity : diaryEntityList) {
+            DiaryResponse diaryResponse = new DiaryResponse(diaryEntity.getId(), diaryEntity.getTitle());
+            list.add(diaryResponse);
+        }
+
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public List<DiaryResponse> fetchDiaryList(final Category category) {
+        final List<DiaryEntity> diaryEntityList = diaryRepository.findAllByCategory(category);
 
         List<DiaryResponse> list = new ArrayList<>();
 
@@ -54,7 +68,6 @@ public class DiaryService {
         return switch (orderBy) {
             case CREATED_AT_DESC -> diaryRepository.findTop10ByOrderByCreatedAtDesc();
             case BODY_LENGTH_DESC -> diaryRepository.findTop10ByOrderByBodyLengthDesc();
-            default -> throw new CustomException(ErrorType.INVALID_ORDER_CRITERIA_ERROR);
         };
     }
 
@@ -64,6 +77,7 @@ public class DiaryService {
 
         return new DiaryDetailResponse(
                 diaryEntity.getId(),
+                diaryEntity.getCategory(),
                 diaryEntity.getTitle(),
                 diaryEntity.getBody(),
                 diaryEntity.getCreatedAt()

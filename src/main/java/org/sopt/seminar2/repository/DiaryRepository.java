@@ -2,6 +2,7 @@ package org.sopt.seminar2.repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.sopt.seminar2.common.enums.Category;
 import org.sopt.seminar2.common.enums.ErrorType;
 import org.sopt.seminar2.common.exception.CustomException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,8 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Long> {
 
     @Query("SELECT d FROM DiaryEntity d ORDER BY LENGTH(d.body) DESC")
     List<DiaryEntity> findTop10ByOrderByBodyLengthDesc();
+
+    List<DiaryEntity> findAllByCategory(final Category category);
 
     Optional<DiaryEntity> findDiaryEntityById(final Long id);
 

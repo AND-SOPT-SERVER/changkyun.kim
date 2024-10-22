@@ -1,13 +1,14 @@
 package org.sopt.seminar2.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jakarta.validation.ConstraintViolation;
 import java.util.List;
 import java.util.Set;
 import org.sopt.seminar2.common.enums.ErrorType;
 import org.springframework.validation.BindingResult;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(Include.NON_NULL)
 public record ResponseDto<T>(
         String code,
         T data,

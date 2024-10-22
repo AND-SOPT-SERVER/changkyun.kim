@@ -11,17 +11,17 @@ public enum OrderBy {
 
     ;
 
-    private final String orderCriteria;
+    private final String criteria;
     private static final Map<String, OrderBy> ORDER_BY_MAP = new HashMap<>();
 
     static {
         for (OrderBy orderBy : OrderBy.values()) {
-            ORDER_BY_MAP.put(orderBy.getOrderCriteria(), orderBy);
+            ORDER_BY_MAP.put(orderBy.getCriteria(), orderBy);
         }
     }
 
-    private OrderBy(String orderCriteria) {
-        this.orderCriteria = orderCriteria;
+    private OrderBy(String criteria) {
+        this.criteria = criteria;
     }
 
     public static OrderBy fromValue(String value) {
@@ -30,10 +30,11 @@ public enum OrderBy {
         if (orderBy == null) {
             throw new CustomException(ErrorType.INVALID_ORDER_CRITERIA_ERROR);
         }
+
         return orderBy;
     }
 
-    public String getOrderCriteria() {
-        return orderCriteria;
+    public String getCriteria() {
+        return criteria;
     }
 }

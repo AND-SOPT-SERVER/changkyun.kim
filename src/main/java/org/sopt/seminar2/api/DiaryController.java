@@ -3,6 +3,7 @@ package org.sopt.seminar2.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
+import org.sopt.seminar2.common.enums.Category;
 import org.sopt.seminar2.common.enums.OrderBy;
 import org.sopt.seminar2.service.DiaryService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,8 @@ public class DiaryController {
     ResponseEntity<Void> postDiary(
             @Valid @RequestBody final PostDiaryRequest postDiaryRequest
     ) {
-        diaryService.writeDiary(postDiaryRequest);
+        Category category = postDiaryRequest.convertToCategory();
+        diaryService.writeDiary(category, postDiaryRequest.title(), postDiaryRequest.body());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

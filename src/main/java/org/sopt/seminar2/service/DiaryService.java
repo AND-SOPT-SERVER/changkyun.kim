@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sopt.seminar2.api.DiaryDetailResponse;
 import org.sopt.seminar2.api.DiaryResponse;
-import org.sopt.seminar2.api.PostDiaryRequest;
+import org.sopt.seminar2.common.enums.Category;
 import org.sopt.seminar2.common.enums.ErrorType;
 import org.sopt.seminar2.common.enums.OrderBy;
 import org.sopt.seminar2.common.exception.CustomException;
@@ -27,12 +27,12 @@ public class DiaryService {
     }
 
     @Transactional
-    public void writeDiary(final PostDiaryRequest postDiaryRequest) {
-        if (diaryRepository.existsByTitle(postDiaryRequest.title())) {
+    public void writeDiary(final Category category, final String title, final String body) {
+        if (diaryRepository.existsByTitle(title)) {
             throw new CustomException(ErrorType.DUPLICATE_DIARY_TITLE_ERROR);
         }
 
-        final DiaryEntity newDiaryEntity = DiaryEntity.create(postDiaryRequest.title(), postDiaryRequest.body());
+        final DiaryEntity newDiaryEntity = DiaryEntity.create(category, title, body);
         diaryRepository.save(newDiaryEntity);
     }
 

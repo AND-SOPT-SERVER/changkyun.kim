@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import org.sopt.seminar2.common.enums.Category;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -19,6 +20,9 @@ public class DiaryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private Category category;
 
     @Column(nullable = false, unique = true)
     private String title;
@@ -33,13 +37,14 @@ public class DiaryEntity {
     protected DiaryEntity() {
     }
 
-    private DiaryEntity(String title, String body) {
+    private DiaryEntity(Category category, String title, String body) {
+        this.category = category;
         this.title = title;
         this.body = body;
     }
 
-    public static DiaryEntity create(final String title, final String body) {
-        return new DiaryEntity(title, body);
+    public static DiaryEntity create(final Category category, final String title, final String body) {
+        return new DiaryEntity(category, title, body);
     }
 
     public void editBody(final String newBody) {
@@ -48,6 +53,10 @@ public class DiaryEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public String getTitle() {

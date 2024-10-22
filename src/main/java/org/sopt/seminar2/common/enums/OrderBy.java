@@ -30,6 +30,7 @@ public enum OrderBy {
         if (orderBy == null) {
             throw new CustomException(ErrorType.INVALID_ORDER_CRITERIA_ERROR);
         }
+
         return orderBy;
     }
 

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface DiaryRepository extends JpaRepository<DiaryEntity, Long> {
 
+    boolean existsByTitle(final String title);
+
     List<DiaryEntity> findTop10ByOrderByCreatedAtDesc();
 
     @Query("SELECT d FROM DiaryEntity d ORDER BY LENGTH(d.body) DESC")

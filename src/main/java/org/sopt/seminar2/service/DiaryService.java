@@ -28,6 +28,10 @@ public class DiaryService {
 
     @Transactional
     public void writeDiary(final PostDiaryRequest postDiaryRequest) {
+        if (diaryRepository.existsByTitle(postDiaryRequest.title())) {
+            throw new CustomException(ErrorType.DUPLICATE_DIARY_TITLE_ERROR);
+        }
+
         final DiaryEntity newDiaryEntity = DiaryEntity.create(postDiaryRequest.title(), postDiaryRequest.body());
         diaryRepository.save(newDiaryEntity);
     }

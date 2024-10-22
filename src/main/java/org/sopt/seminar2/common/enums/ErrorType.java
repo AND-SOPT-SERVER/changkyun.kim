@@ -10,6 +10,7 @@ public enum ErrorType {
     DATA_INTEGRITY_VIOLATION_ERROR(HttpStatus.BAD_REQUEST, "40004", "데이터 무결성 제약 조건을 위반했습니다."),
     INVALID_ORDER_CRITERIA_ERROR(HttpStatus.BAD_REQUEST, "40005", "잘못된 일기 목록 정렬 기준입니다."),
     NOT_FOUND_DIARY_ERROR(HttpStatus.NOT_FOUND, "40401", "id에 해당하는 일기가 존재하지 않습니다."),
+    DUPLICATE_DIARY_TITLE_ERROR(HttpStatus.CONFLICT, "40901", "이미 존재하는 일기 제목입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50001", "예상치 못한 서버 오류가 발생했습니다."),
 
     ;

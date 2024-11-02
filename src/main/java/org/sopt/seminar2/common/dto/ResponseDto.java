@@ -35,36 +35,23 @@ public record ResponseDto<T>(
         return new ResponseDto<>(errorType.getCode(), null, errorType.getMessage(), ValidationError.of(violations));
     }
 
-    public static class ValidationError {
-        private final String field;
-        private final String message;
-
-        private ValidationError(String field, String message) {
-            this.field = field;
-            this.message = message;
-        }
-
+    private record ValidationError(
+            String field,
+            String message
+    ) {
         // BindingResult에서 FieldError 목록을 ValidationError로 변환
-        public static List<ValidationError> of(final BindingResult bindingResult) {
+        private static List<ValidationError> of(final BindingResult bindingResult) {
             return bindingResult.getFieldErrors().stream()
                     .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
                     .toList();
         }
 
         // ConstraintViolation 목록을 ValidationError로 변환
-        public static List<ValidationError> of(final Set<ConstraintViolation<?>> violations) {
+        private static List<ValidationError> of(final Set<ConstraintViolation<?>> violations) {
             return violations.stream()
                     .map(violation -> new ValidationError(violation.getPropertyPath().toString(),
                             violation.getMessage()))
                     .toList();
-        }
-
-        public String getField() {
-            return field;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

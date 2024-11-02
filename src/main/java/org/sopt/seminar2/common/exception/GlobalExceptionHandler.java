@@ -67,7 +67,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ResponseDto<?>> handleTypeMismatchException(MethodArgumentTypeMismatchException e) {
         logger.error("컨트롤러 메서드 타입 변환 예외 발생: {}", e.getMessage());
-        String errorDetail = String.format("'%s'은(는) %s 타입이어야 합니다.", e.getValue(), e.getRequiredType().getSimpleName());
+        String errorDetail = String.format(
+                "'%s'은(는) %s 타입이어야 합니다.", e.getParameter().getParameterName(), e.getRequiredType().getSimpleName()
+        );
 
         return ResponseEntity
                 .status(ErrorType.TYPE_MISMATCH_ERROR.getHttpStatus())

@@ -44,3 +44,5 @@ bin/
 /.gradle/**
 /.idea/**
 /build/**
+
+*.yml
